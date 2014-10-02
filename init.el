@@ -78,7 +78,7 @@
 ; General UI stuff
 ;; (global-linum-mode t)
 (global-hungry-delete-mode)
-(global-hl-line-mode t)
+;(global-hl-line-mode t)
 (setq inhibit-startup-message t)
 (setq inhibit-startup-echo-area-message t)
 (setq initial-scratch-message "")
@@ -345,3 +345,21 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(racket-paren-face ((t (:foreground "gray60")))))
+
+(eldoc-mode)
+
+;; mono / variable width font
+(make-face 'default-fixed)
+(make-face 'default-variable)
+
+(set-face-font 'default-fixed "Input Mono Narrow:12")
+(set-face-font 'default-variable "Input Sans Narrow:12")
+
+;; magit key mode doesn't have hooks
+(defadvice magit-key-mode (after use-fixed-font activate)
+  (buffer-face-set 'default-fixed))
+
+;; helm buffers are ???
+(dolist (face (face-list))
+  (when (string-prefix-p "helm-" (face-name face))
+    (set-face-attribute face nil :family "Input Mono Narrow")))
