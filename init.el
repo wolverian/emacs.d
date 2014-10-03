@@ -368,3 +368,8 @@
 (dolist (face (face-list))
   (when (string-prefix-p "helm-" (face-name face))
     (set-face-attribute face nil :family "Input Mono Narrow")))
+
+;; markdown
+
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
