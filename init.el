@@ -11,7 +11,8 @@
                               racket-mode
                               smart-tab
                               hungry-delete
-                              smartparens))
+                              smartparens
+                              yaml-mode))
 
 (setq stable-package-list '( ;; evil
                             ;; evil-leader
@@ -37,7 +38,8 @@
                             haskell-mode
                             web-mode
                             paradox
-                            cider))
+                            cider
+                            popwin))
 
 (add-to-list 'package-archives
        '("melpa" . "http://melpa.milkbox.net/packages/") t)
@@ -115,7 +117,7 @@
 (global-unset-key (kbd "<down>"))
 
 (load-theme 'minimal-light t)
-(set-default-font "Input Sans Narrow-12")
+(set-default-font "Input Sans Narrow-13")
 
 (setq paradox-github-token "508149e5159aa7efff0393a0b706c6e382c565b3")
 
@@ -352,8 +354,11 @@
 (make-face 'default-fixed)
 (make-face 'default-variable)
 
-(set-face-font 'default-fixed "Input Mono Narrow:12")
-(set-face-font 'default-variable "Input Sans Narrow:12")
+(set-face-font 'default-fixed "Input Mono Narrow-13")
+(set-face-font 'default-variable "Input Sans Narrow-13")
+
+(defadvice paradox-list-packages (after use-fixed-font activate)
+  (buffer-face-set 'default-fixed))
 
 ;; magit key mode doesn't have hooks
 (defadvice magit-key-mode (after use-fixed-font activate)
