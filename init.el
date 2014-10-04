@@ -160,7 +160,7 @@
 (require 'recentf)
 (recentf-mode 1)
 
-(global-set-key (kbd "C-, p") 'list-packages)
+(global-set-key (kbd "C-, p") 'paradox-list-packages)
 (global-set-key (kbd "C-, e") 'eshell)
 (global-set-key (kbd "C-, s") 'magit-status)
 
@@ -230,8 +230,16 @@
    (quote
     ("b9183de9666c3a16a7ffa7faaa8e9941b8d0ab50f9aaba1ca49f2f3aec7e3be9" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
  '(default-input-method "TeX")
+ '(eshell-modules-list
+   (quote
+    (eshell-alias eshell-basic eshell-cmpl eshell-dirs eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt eshell-script eshell-term eshell-unix)))
+ '(eshell-visual-commands
+   (quote
+    ("vi" "vim" "tmux" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm")))
+ '(eshell-visual-subcommands (quote (("git" "show" "log" "diff"))))
  '(haskell-mode-hook (quote (turn-on-haskell-indentation)) t)
  '(paradox-automatically-star t)
+ '(racket-program "~/Applications/Racket v6.1/bin/racket")
  '(rich-minority-mode nil)
  '(save-place t nil (saveplace))
  '(tool-bar-mode nil))
@@ -346,9 +354,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(eshell-prompt ((t (:foreground "gray60"))))
  '(racket-paren-face ((t (:foreground "gray60")))))
 
-(eldoc-mode)
+(global-eldoc-mode)
 
 ;; mono / variable width font
 (make-face 'default-fixed)
@@ -357,8 +366,7 @@
 (set-face-font 'default-fixed "Input Mono Narrow-13")
 (set-face-font 'default-variable "Input Sans Narrow-13")
 
-(defadvice paradox-list-packages (after use-fixed-font activate)
-  (buffer-face-set 'default-fixed))
+(add-hook 'tabulated-list-mode-hook (lambda () (buffer-face-set 'default-fixed)))
 
 ;; magit key mode doesn't have hooks
 (defadvice magit-key-mode (after use-fixed-font activate)
@@ -368,6 +376,8 @@
 (dolist (face (face-list))
   (when (string-prefix-p "helm-" (face-name face))
     (set-face-attribute face nil :family "Input Mono Narrow")))
+
+(add-hook 'dired-mode-hook (lambda () (buffer-face-set 'default-fixed)))
 
 ;; markdown
 
