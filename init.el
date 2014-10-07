@@ -128,7 +128,7 @@
 (require 'server)
 (unless (server-running-p)
   (server-start))
-(setq server-socket-dir (format "/tmp/emacs%d" (user-uid)))
+;(setq server-socket-dir (format "/tmp/emacs%d" (user-uid)))
 
 ;; some custom filetype mappings
 (add-to-list 'auto-mode-alist '("\\.jst\\'" . web-mode))
@@ -163,6 +163,10 @@
 (global-set-key (kbd "C-, p") 'paradox-list-packages)
 (global-set-key (kbd "C-, e") 'eshell)
 (global-set-key (kbd "C-, s") 'magit-status)
+(global-set-key (kbd "C-, a") (lambda ()
+                                (interactive)
+                                (magit-stage-all)
+                                (magit-commit)))
 
 (global-set-key (kbd "M-9") 'backward-sexp)
 (global-set-key (kbd "M-0") 'forward-sexp)
@@ -230,17 +234,20 @@
    (quote
     ("b9183de9666c3a16a7ffa7faaa8e9941b8d0ab50f9aaba1ca49f2f3aec7e3be9" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
  '(default-input-method "TeX")
- '(eshell-modules-list
-   (quote
-    (eshell-alias eshell-basic eshell-cmpl eshell-dirs eshell-glob eshell-hist eshell-ls eshell-pred eshell-prompt eshell-script eshell-term eshell-unix)))
  '(eshell-visual-commands
    (quote
     ("vi" "vim" "tmux" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm")))
  '(eshell-visual-subcommands (quote (("git" "show" "log" "diff"))))
+ '(erc-prompt ">")
  '(haskell-mode-hook (quote (turn-on-haskell-indentation)) t)
+ '(markdown-command "pandoc -sS5")
  '(paradox-automatically-star t)
  '(racket-program "~/Applications/Racket v6.1/bin/racket")
- '(rich-minority-mode nil)
+ '(rcirc-server-alist
+   (quote
+    (("irc.freenode.net" :nick "iviv" :port 6697 :channels
+      ("#racket")
+      :encryption tls))))
  '(save-place t nil (saveplace))
  '(tool-bar-mode nil))
 
@@ -355,6 +362,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(eshell-prompt ((t (:foreground "gray60"))))
+ '(erc-notice-face ((t (:foreground "SlateBlue"))))
+ '(erc-timestamp-face ((t nil)))
+ '(markdown-pre-face ((t (:inherit (font-lock-constant-face default-fixed) :weight normal))))
  '(racket-paren-face ((t (:foreground "gray60")))))
 
 (global-eldoc-mode)
