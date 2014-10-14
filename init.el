@@ -218,6 +218,12 @@
 (smartparens-global-mode t)
 ; https://github.com/Fuco1/smartparens/wiki/Example-configuration
 
+(show-smartparens-global-mode)
+
+(sp-with-modes '(racket-mode racket-repl-mode)
+  (sp-local-pair "'" nil :actions nil)
+  (sp-local-pair "`" nil :actions nil))
+
 (require 'git-gutter)
 ;; (git-gutter:linum-setup)
 (global-git-gutter-mode t)
@@ -385,3 +391,32 @@
 
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+;; common lisp
+
+;; (require 'slime)
+
+;; (add-to-list 'slime-contribs 'slime-fancy)
+;; (setq slime-lisp-implementations
+;;       '((sbcl ("sbcl" "--core" "/Users/iv/sbcl.core-for-slime"))))
+
+;; org mode
+
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c c") 'org-capture)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c b") 'org-iswitchb)
+
+;; outshine
+
+(defvar outline-minor-mode-prefix "\M-#")
+
+(require 'outshine)
+(add-hook 'outline-minor-mode-hook 'outshine-hook-function)
+
+(require 'racket-mode)
+
+(add-hook 'racket-mode-hook 'outline-minor-mode)
+
+(define-key racket-mode-map (kbd "C-c C-l") 'racket-run)
+(define-key racket-mode-map (kbd "C-c C-t") 'racket-test)
