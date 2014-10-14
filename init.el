@@ -158,6 +158,10 @@
 (require 'recentf)
 (recentf-mode 1)
 
+(defun toggle-fixed-font ()
+  (interactive)
+  (buffer-face-toggle 'default-fixed))
+
 (global-set-key (kbd "C-, p") 'paradox-list-packages)
 (global-set-key (kbd "C-, e") 'eshell)
 (global-set-key (kbd "C-, s") 'magit-status)
@@ -165,6 +169,7 @@
                                 (interactive)
                                 (magit-stage-all)
                                 (magit-commit)))
+(global-set-key (kbd "C-, f") 'toggle-fixed-font)
 
 (global-set-key (kbd "M-9") 'backward-sexp)
 (global-set-key (kbd "M-0") 'forward-sexp)
