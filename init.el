@@ -238,6 +238,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(circe-reduce-lurker-spam t)
  '(column-number-mode t)
  '(custom-safe-themes
    (quote
@@ -245,7 +246,7 @@
  '(default-input-method "TeX")
  '(eshell-visual-commands
    (quote
-    ("vi" "vim" "tmux" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm")))
+    ("vi" "vim" "tmux" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm" "mosh")))
  '(eshell-visual-subcommands (quote (("git" "show" "log" "diff"))))
  '(erc-prompt ">")
  '(haskell-mode-hook (quote (turn-on-haskell-indentation)) t)
@@ -257,6 +258,13 @@
     (("irc.freenode.net" :nick "iviv" :port 6697 :channels
       ("#racket")
       :encryption tls))))
+ '(inferior-lisp-program "sbcl")
+ '(org-agenda-files (quote ("~/src/plai/")))
+ '(org-default-notes-file "~/.notes.org")
+ '(outshine-use-speed-commands t)
+ '(paradox-automatically-star t)
+ '(racket-program "/Applications/Racket v6.1.1.1/bin/racket")
+ '(rich-minority-mode nil)
  '(save-place t nil (saveplace))
  '(tool-bar-mode nil))
 
@@ -364,10 +372,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(circe-prompt-face ((t (:foreground "gray70" :weight bold))))
+ '(circe-topic-diff-new-face ((t (:background "LightGreen"))))
  '(eshell-prompt ((t (:foreground "gray60"))))
  '(erc-notice-face ((t (:foreground "SlateBlue"))))
  '(erc-timestamp-face ((t nil)))
  '(markdown-pre-face ((t (:inherit (font-lock-constant-face default-fixed) :weight normal))))
+ '(mmm-default-submode-face ((t (:background "gray98"))))
  '(racket-paren-face ((t (:foreground "gray60")))))
 
 (global-eldoc-mode)
