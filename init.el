@@ -1,7 +1,6 @@
 (require 'package)
 
 (setq unstable-package-list '( ;; evil-surround
-                              company-go
                               dash-at-point
                               direx
                               go-mode
@@ -22,7 +21,6 @@
                             rainbow-delimiters
                             markdown-mode
                             coffee-mode
-                            company
                             flycheck
                             solarized-theme
                             less-css-mode
@@ -272,12 +270,6 @@
 ;          (lambda ()
 ;            (define-key evil-normal-state-map (kbd "C-]") 'haskell-mode-jump-to-def)
 ;            (define-key evil-normal-state-map (kbd "C-t") 'pop-tag-mark)))
-
-(require 'company)
-(global-company-mode)
-
-(add-hook 'go-mode (lambda ()
-                     (setq-local evil-shift-width 8)))
 
 ;; helm
 
