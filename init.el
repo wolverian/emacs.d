@@ -8,7 +8,7 @@
                               haskell-mode
                               minimal-theme
                               racket-mode
-                              smart-tab
+;                              smart-tab
                               hungry-delete
                               smartparens
                               yaml-mode))
@@ -141,8 +141,8 @@
 (require 'dash-at-point)
 (add-to-list 'dash-at-point-mode-alist '(coffee-mode . "Web"))
 
-(require 'smart-tab)
-(global-smart-tab-mode 1)
+;; (require 'smart-tab)
+;; (global-smart-tab-mode 1)
 
 ; When executing shell commands from emacs, set PATH correctly.
 (require 'exec-path-from-shell)
