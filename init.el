@@ -15,6 +15,10 @@
 
 ;; packages
 
+(use-package exec-path-from-shell
+  :init (when (memq window-system '(mac ns))
+	  (exec-path-from-shell-initialize)))
+
 (use-package nyan-mode
   :init (progn
 	  (nyan-mode)
@@ -37,13 +41,22 @@
   :init (use-package smartparens-config)
   :config (progn
 	    (smartparens-global-mode)
-	    (show-smartparens-global-mode)))
+	    (show-smartparens-global-mode))
+  :bind (("C-)" . sp-forward-slurp-sexp)))
 
 (use-package magit
   :bind (("C-, s" . magit-status)))
 
-(use-package haskell-mode)
+(use-package haskell-mode
+  :config (progn
+	    (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+	    (bind-keys :map haskell-mode-map
+		       ("C-c C-l" . haskell-process-load-file)
+		       ("C-c C-z" . haskell-interactive-switch)
+		       ("C-c C-t" . haskell-interactive-do-type)
+		       ("C-c C-i" . haskell-interactive-do-info))))
 
 ;; non-mode specific keys
 
 (global-set-key (kbd "C-, e") 'eshell)
+
