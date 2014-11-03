@@ -11,7 +11,7 @@
 (setq inhibit-startup-screen t)
 (setq inhibit-startup-echo-area-message "iv")
 (load-theme 'minimal-light t)
-(set-default-font "Input Sans 13")
+(set-default-font "Input Sans Narrow-13")
 
 ;; packages
 
@@ -35,7 +35,12 @@
 	  (use-package helm-grep))
   :bind (("M-x" . helm-M-x)
 	 ("C-x b" . helm-mini)
-	 ("C-x C-f" . helm-find-files)))
+	 ("C-x C-f" . helm-find-files)
+	 ("M-i" . helm-show-kill-ring))
+  :config (bind-keys :map helm-map
+		     ("<tab>" . helm-execute-persistent-action)
+		     ("C-i" . helm-execute-persistent-action)
+		     ("C-z" . helm-select-action)))
 
 (use-package smartparens
   :init (use-package smartparens-config)
@@ -56,7 +61,43 @@
 		       ("C-c C-t" . haskell-interactive-do-type)
 		       ("C-c C-i" . haskell-interactive-do-info))))
 
+(use-package factor-mode
+  :config (progn
+	    (setq fuel-factor-root-dir "/Users/iv/Applications/factor")))
+
 ;; non-mode specific keys
 
-(global-set-key (kbd "C-, e") 'eshell)
+(use-package eldoc
+  :init (eldoc-mode))
 
+(bind-keys
+ ("C-, e" . eshell)
+ ("C-, p" . list-packages))
+
+;; fonts
+
+;; mono / variable width font
+(make-face 'default-fixed)
+(make-face 'default-variable)
+
+(set-face-font 'default-fixed "Input Mono Narrow-13")
+(set-face-font 'default-variable "Input Sans Narrow-13")
+
+(add-hook 'tabulated-list-mode-hook (lambda () (buffer-face-set 'default-fixed)))
+
+;; magit key mode doesn't have hooks
+(defadvice magit-key-mode (after use-fixed-font activate)
+  (buffer-face-set 'default-fixed))
+
+;; helm buffers are ???
+(dolist (face (face-list))
+  (when (string-prefix-p "helm-" (face-name face))
+    (set-face-attribute face nil :family "Input Mono Narrow")))
+
+(add-hook 'dired-mode-hook (lambda () (buffer-face-set 'default-fixed)))
+
+(defun toggle-fixed-font ()
+  (interactive)
+  (buffer-face-toggle 'default-fixed))
+
+(bind-key "C-, f" 'toggle-fixed-font)
