@@ -1,3 +1,9 @@
+(package-initialize)
+
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+
+
 (require 'use-package)
 
 ;; visual settings
@@ -9,6 +15,10 @@
 (load-theme 'minimal-light t)
 (setq-default indent-tabs-mode nil)
 (defalias #'yes-or-no-p #'y-or-n-p)
+
+;; editing settings
+
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; packages
 
@@ -34,19 +44,27 @@
 
 (use-package helm
   :init (progn
-	  (use-package helm-config)
-	  (use-package helm-eshell)
-	  (use-package helm-grep)
-	  (use-package helm-projectile))
+          (use-package helm-config)
+          (use-package helm-eshell)
+          (use-package helm-grep)
+          (use-package helm-projectile)
+          (use-package helm-dash))
   :bind (("M-x" . helm-M-x)
-	 ("C-x b" . helm-mini)
-	 ("C-x C-f" . helm-find-files)
-	 ("C-, l" . helm-projectile)
-	 ("M-i" . helm-show-kill-ring))
-  :config (bind-keys :map helm-map
-		     ("<tab>" . helm-execute-persistent-action)
-		     ("C-i" . helm-execute-persistent-action)
-		     ("C-z" . helm-select-action)))
+         ("s-b" . helm-mini)
+         ("s-i" . helm-imenu)
+         ("s-j" . helm-projectile)
+         ("s-e" . eshell)
+         ("s-d" . helm-dash-at-point)
+         ("C-x C-f" . helm-find-files)
+         ("M-i" . helm-show-kill-ring)
+         ("s-o" . helm-projectile-switch-project))
+  :config (progn
+            (bind-keys :map helm-map
+                       ("<tab>" . helm-execute-persistent-action)
+                       ("C-i" . helm-execute-persistent-action)
+                       ("C-z" . helm-select-action))
+            (setq helm-dash-common-docsets '("Lo-Dash"))
+            (setq helm-dash-browser-func #'eww)))
 
 (use-package smartparens
   :init (use-package smartparens-config)
@@ -56,8 +74,8 @@
             (add-to-list 'sp-ignore-modes-list 'web-mode))
   :bind (("C-)" . sp-forward-slurp-sexp)))
 
-(use-package magit
-  :bind (("C-, s" . magit-status)))
+;; (use-package magit
+;;   :bind (("C-, s" . magit-status)))
 
 (use-package less-css-mode
   :config (setq css-indent-offset 2))
@@ -91,7 +109,7 @@
             (add-hook 'go-mode-hook 'go-oracle-mode)))
 
 (use-package paradox
-  :bind (("C-, p" . paradox-list-packages)))
+  :bind (("s-p" . paradox-list-packages)))
 
 (use-package popwin
   :config (popwin-mode 1))
@@ -111,13 +129,9 @@
 (use-package eldoc
   :init (eldoc-mode))
 
-;; non-mode specific keys
-
-(bind-keys
- ("s-e" . eshell)
- ("s-i" . helm-imenu)
- ("s-j" . helm-projectile)
- ("s-b" . helm-mini))
+(use-package clojure-quick-repls
+  :commands clojure-quick-repls-connect
+  :config (setq cider-switch-to-repl-command #'clojure-quick-repls-switch-to-relevant-repl))
 
 ;; fonts
 
@@ -148,8 +162,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (haskell-mode helm pallet paradox projectile web-mode less-css-mode package-build shut-up epl git commander f dash s)))
- '(paradox-github-token t))
+    (nyan-mode emmet-mode pcmpl-homebrew helm-idris idris-mode helm-projectile clojure-quick-repls smartparens exec-path-from-shell cider coffee-mode haskell-mode helm helm-dash paradox projectile web-mode less-css-mode use-package minimal-theme whole-line-or-region))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
