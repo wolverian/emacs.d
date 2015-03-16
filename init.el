@@ -1,10 +1,10 @@
 (package-initialize)
 
+(eval-when-compile
+  (require 'use-package))
+
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
-
-
-(require 'use-package)
 
 ;; visual settings
 
@@ -18,37 +18,41 @@
 
 ;; editing settings
 
+(desktop-save-mode 1)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; packages
 
 (use-package exec-path-from-shell
+  :demand t
   :init (when (memq window-system '(mac ns))
 	  (exec-path-from-shell-initialize)))
 
 (use-package nyan-mode
-  :init (progn
-	  (nyan-mode)
-	  (nyan-start-animation))
-  :config (setq nyan-wavy-trail t))
+  :config (progn
+            (setq nyan-wavy-trail t)
+            (nyan-mode)
+            (nyan-start-animation)))
 
 (use-package coffee-mode
   :config (setq coffee-tab-width 2))
 
 (use-package whole-line-or-region
+  :demand t
   :commands whole-line-or-region-mode
-  :init (whole-line-or-region-mode))
+  :config (whole-line-or-region-mode 1))
 
-(use-package aggressive-indent
-  :init (global-aggressive-indent-mode))
+;; (use-package aggressive-indent
+;;   :init (global-aggressive-indent-mode))
 
-(use-package helm
-  :init (progn
-          (use-package helm-config)
-          (use-package helm-eshell)
-          (use-package helm-grep)
-          (use-package helm-projectile)
-          (use-package helm-dash))
+(use-package eshell)
+
+(use-package langtool
+  :commands langtool-check
+  :config (progn
+            (setq langtool-language-tool-jar "/usr/local/Cellar/languagetool/2.8/libexec/languagetool.jar")))
+
+(use-package helm-config
   :bind (("M-x" . helm-M-x)
          ("s-b" . helm-mini)
          ("s-i" . helm-imenu)
@@ -59,6 +63,10 @@
          ("M-i" . helm-show-kill-ring)
          ("s-o" . helm-projectile-switch-project))
   :config (progn
+            (use-package helm-eshell)
+            (use-package helm-grep)
+            (use-package helm-projectile)
+            (use-package helm-dash)
             (bind-keys :map helm-map
                        ("<tab>" . helm-execute-persistent-action)
                        ("C-i" . helm-execute-persistent-action)
@@ -67,20 +75,21 @@
             (setq helm-dash-browser-func #'eww)))
 
 (use-package smartparens
-  :init (use-package smartparens-config)
   :config (progn
+            (use-package smartparens-config)
 	    (smartparens-global-mode)
 	    (show-smartparens-global-mode)
             (add-to-list 'sp-ignore-modes-list 'web-mode))
   :bind (("C-)" . sp-forward-slurp-sexp)))
 
-;; (use-package magit
-;;   :bind (("C-, s" . magit-status)))
+(use-package magit
+  :load-path "/Users/iv/.emacs.d/site-lisp/magit"
+  :bind (("s-s" . magit-status))
+  :config (progn
+            (setq magit-expand-staged-on-commit t)))
 
 (use-package less-css-mode
   :config (setq css-indent-offset 2))
-
-(use-package vc)
 
 (use-package haskell-mode
   :config (progn
@@ -94,19 +103,19 @@
                        ("M-." . haskell-mode-jump-to-def-or-tag)
                        ("M-," . pop-tag-mark))))
 
-(use-package factor-mode
-  :config (progn
-	    (setq fuel-factor-root-dir "/Users/iv/Applications/factor")
-	    (add-to-list 'auto-mode-alist '("\\.factor-rc\\'" . factor-mode))))
+;; (use-package factor-mode
+;;   :config (progn
+;; 	    (setq fuel-factor-root-dir "/Users/iv/Applications/factor")
+;; 	    (add-to-list 'auto-mode-alist '("\\.factor-rc\\'" . factor-mode))))
 
-(use-package oracle
-  :commands go-oracle-mode
-  :load-path "/Users/iv/src/go/src/golang.org/x/tools/cmd/oracle/")
+;; (use-package oracle
+;;   :commands go-oracle-mode
+;;   :load-path "/Users/iv/src/go/src/golang.org/x/tools/cmd/oracle/")
 
-(use-package go-mode
-  :config (progn
-            (setq gofmt-command "goimports")
-            (add-hook 'go-mode-hook 'go-oracle-mode)))
+;; (use-package go-mode
+;;   :config (progn
+;;             (setq gofmt-command "goimports")
+;;             (add-hook 'go-mode-hook 'go-oracle-mode)))
 
 (use-package paradox
   :bind (("s-p" . paradox-list-packages)))
@@ -119,8 +128,8 @@
 
 (use-package web-mode
   :mode "\\.jst\\'"
-  :init (setq web-mode-engines-alist '(("underscore" . "\\.jst\\'")))
   :config (progn
+            (setq web-mode-engines-alist '(("underscore" . "\\.jst\\'")))
             (add-hook 'web-mode-hook 'emmet-mode)
             (setq web-mode-markup-indent-offset 2)
             (setq web-mode-extra-auto-pairs
@@ -139,22 +148,23 @@
 (set-face-font 'default "Input Mono Narrow-14")
 (set-face-font 'variable-pitch "Input Sans Narrow-14")
 
-(add-hook 'tabulated-list-mode-hook (lambda () (buffer-face-set 'default-fixed)))
+;(add-hook 'tabulated-list-mode-hook (lambda () (buffer-face-set 'default-fixed)))
 
 ;; magit key mode doesn't have hooks
 (defadvice magit-key-mode (after use-fixed-font activate)
   (buffer-face-set 'default-fixed))
 
 ;; helm buffers are ???
-(dolist (face (face-list))
-  (when (string-prefix-p "helm-" (face-name face))
-    (set-face-attribute face nil :family "Input Mono Narrow")))
+;; (dolist (face (face-list))
+;;   (when (string-prefix-p "helm-" (face-name face))
+;;     (set-face-attribute face nil :family "Input Mono Narrow")))
 
-(add-hook 'dired-mode-hook (lambda () (buffer-face-set 'default-fixed)))
+;(add-hook 'dired-mode-hook (lambda () (buffer-face-set 'default-fixed)))
 
 (bind-key "C-, f" 'variable-pitch-mode)
 
 (server-start)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -162,7 +172,8 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (nyan-mode emmet-mode pcmpl-homebrew helm-idris idris-mode helm-projectile clojure-quick-repls smartparens exec-path-from-shell cider coffee-mode haskell-mode helm helm-dash paradox projectile web-mode less-css-mode use-package minimal-theme whole-line-or-region))))
+    (langtool popwin bind-key clojure-mode dash nyan-mode emmet-mode pcmpl-homebrew helm-idris idris-mode helm-projectile clojure-quick-repls smartparens exec-path-from-shell cider coffee-mode haskell-mode helm helm-dash paradox projectile web-mode less-css-mode use-package minimal-theme whole-line-or-region)))
+ '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
