@@ -121,7 +121,10 @@
   :bind (("s-p" . paradox-list-packages)))
 
 (use-package popwin
-  :config (popwin-mode 1))
+  :config (progn
+            (popwin-mode 1)
+            (setq popwin:popup-window-position 'right)
+            (setq popwin:popup-window-width 0.4)))
 
 (use-package projectile
   :config (projectile-global-mode))
